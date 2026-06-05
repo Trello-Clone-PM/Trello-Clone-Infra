@@ -119,6 +119,9 @@ services:
     build:
       context: ../Trello-Clone-Frontend/apps/landing
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_USER_APP_URL: ${LANDING_USER_APP_URL:-http://103.179.189.81}
+        NEXT_PUBLIC_SITE_URL: ${LANDING_SITE_URL:-http://103.179.189.81:3000}
     restart: unless-stopped
     ports:
       - "3000:3000"
