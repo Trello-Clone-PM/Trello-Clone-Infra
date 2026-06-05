@@ -89,6 +89,26 @@ services:
       retries: 5
       start_period: 30s
 
+  # Edge gateway: single entry on :80, routes by Host (subdomain) to each app.
+  # Put Cloudflare in front of this. SSL mode "Flexible" (CF<->origin HTTP).
+  gateway:
+    image: nginx:alpine
+    restart: unless-stopped
+    depends_on:
+      - frontend-user
+      - frontend-admin
+      - landing
+      - minio
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/gateway.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    networks:
+      - frontend
+      - backend
+
   frontend-user:
     build:
       context: ../Trello-Clone-Frontend
@@ -97,7 +117,7 @@ services:
     depends_on:
       - api
     ports:
-      - "80:80"
+      - "8080:80"
     networks:
       - frontend
       - backend
