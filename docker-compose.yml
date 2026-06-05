@@ -123,10 +123,15 @@ services:
         NEXT_PUBLIC_USER_APP_URL: ${LANDING_USER_APP_URL:-http://103.179.189.81}
         NEXT_PUBLIC_SITE_URL: ${LANDING_SITE_URL:-http://103.179.189.81:3000}
     restart: unless-stopped
+    environment:
+      LANDING_API_URL: http://api:4000
+    depends_on:
+      - api
     ports:
       - "3000:3000"
     networks:
       - frontend
+      - backend
 
 networks:
   frontend:
